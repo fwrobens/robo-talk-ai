@@ -40,13 +40,28 @@ serve(async (req) => {
 
     console.log('Received prompt:', prompt);
 
+    // Use Gemini 2.5 Flash with thinking configuration
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: prompt }] }]
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                {
+                  text: prompt
+                }
+              ]
+            }
+          ],
+          generationConfig: {
+            thinkingConfig: {
+              thinkingBudget: -1
+            }
+          }
         })
       }
     );
